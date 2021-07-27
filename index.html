@@ -33,47 +33,105 @@
   <main class="page-main">
     <h1 class="page-main__title">Конвертер валют онлайн</h1>
     <section class="page-main__section">
-      <div class="converter">
+      <div class="converter converter--left">
         <p class="converter__text">У меня есть</p>
-        <ul class="converter__list">
-          <li class="converter__list-item">Rub</li>
-          <li class="converter__list-item">USD</li>
-          <li class="converter__list-item">Eur</li>
-          <li class="converter__list-item">Gbp</li>
-          <li class="converter__list-item">Byr</li>
+        <ul class="converter__list converter__list--left">
+          <li class="converter__list-item"><button
+              class="converter__list-button">Rub</button></li>
+          <li class="converter__list-item"><button class="converter__list-button">USD</button></li>
+          <li class="converter__list-item"><button class="converter__list-button converter__list-button--active">Eur</button></li>
+          <li class="converter__list-item"><button class="converter__list-button">Gbp</button></li>
+          <li class="converter__list-item"><select class="converter__list-select converter__list-select--active">
+              <option value="BYR">Byr</option>
+              <option value="HKD">HKD</option>
+              <option value="IDR">IDR</option>
+              <option value="ILS">ILS</option>
+              <option value="DKK">DKK</option>
+              <option value="INR">INR</option>
+              <option value="CHF">CHF</option>
+              <option value="MXN">MXN</option>
+              <option value="CZK">CZK</option>
+              <option value="SGD">SGD</option>
+              <option value="THB">THB</option>
+              <option value="HRK">HRK</option>
+              <option value="MYR">MYR</option>
+              <option value="NOK">NOK</option>
+              <option value="CNY">CNY</option>
+              <option value="BGN">BGN</option>
+              <option value="PHP">PHP</option>
+              <option value="SEK">SEK</option>
+              <option value="PLN">PLN</option>
+              <option value="ZAR">ZAR</option>
+              <option value="CAD">CAD</option>
+              <option value="ISK">ISK</option>
+              <option value="BRL">BRL</option>
+              <option value="RON">RON</option>
+              <option value="NZD">NZD</option>
+              <option value="TRY">TRY</option>
+              <option value="JPY">JPY</option>
+              <option value="KRW">KRW</option>
+              <option value="HUF">HUF</option>
+              <option value="AUD">AUD</option>
+            </select>
+          </li>
         </ul>
         <p class="converter__input-block">
-          <input class="converter__input" placeholder="5 000"></input>
-          <span class="converter__current-rate">1 RUB = 0.0135 USD</span>
+          <input class="converter__input" value="5000"></input>
+          <span class="converter__current-rate"></span>
         </p>
       </div>
-      <div class="arrows">
-        <svg class="arrows__svg-right" width="39" height="16" viewBox="0 0 39 16" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M29.5229 15.2253L36.6356 8.11266L29.5229 1" stroke="black" stroke-width="2" />
-          <path d="M36.8461 8.17848L0.236816 8.17848" stroke="black" stroke-width="2" />
-        </svg>
-        <svg class="arrows__svg-left" width="39" height="17" viewBox="0 0 39 17" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.32324 1.54802L2.21058 8.66068L9.32324 15.7733" stroke="black" stroke-width="2" />
-          <path d="M2.00008 8.59486L38.6094 8.59486" stroke="black" stroke-width="2" />
-        </svg>
-      </div>
-      <div class="converter-two">
-        <p class="converter-two__text">Хочу приобрести</p>
-        <ul class="converter-two__list">
-          <li class="converter-two__list-item">Rub</li>
-          <li class="converter-two__list-item">USD</li>
-          <li class="converter-two__list-item">Eur</li>
-          <li class="converter-two__list-item">Gbp</li>
-          <li class="converter-two__list-item">Byr</li>
+      <button class="arrows">
+      </button>
+      <div class="converter converter--right">
+        <p class="converter__text">Хочу приобрести</p>
+        <ul class="converter__list converter__list--right">
+          <li class="converter__list-item"><button class="converter__list-button">Rub</button></li>
+          <li class="converter__list-item"><button
+              class="converter__list-button converter__list-button--active">USD</button></li>
+          <li class="converter__list-item"><button class="converter__list-button">Eur</button></li>
+          <li class="converter__list-item"><button class="converter__list-button">Gbp</button></li>
+          <li class="converter__list-item">
+            <select class="converter__list-select converter__list-select--right">
+              <option value="BYR">Byr</option>
+              <option value="HKD">HKD</option>
+              <option value="IDR">IDR</option>
+              <option value="ILS">ILS</option>
+              <option value="DKK">DKK</option>
+              <option value="INR">INR</option>
+              <option value="CHF">CHF</option>
+              <option value="MXN">MXN</option>
+              <option value="CZK">CZK</option>
+              <option value="SGD">SGD</option>
+              <option value="THB">THB</option>
+              <option value="HRK">HRK</option>
+              <option value="MYR">MYR</option>
+              <option value="NOK">NOK</option>
+              <option value="CNY">CNY</option>
+              <option value="BGN">BGN</option>
+              <option value="PHP">PHP</option>
+              <option value="SEK">SEK</option>
+              <option value="PLN">PLN</option>
+              <option value="ZAR">ZAR</option>
+              <option value="CAD">CAD</option>
+              <option value="ISK">ISK</option>
+              <option value="BRL">BRL</option>
+              <option value="RON">RON</option>
+              <option value="NZD">NZD</option>
+              <option value="TRY">TRY</option>
+              <option value="JPY">JPY</option>
+              <option value="KRW">KRW</option>
+              <option value="HUF">HUF</option>
+              <option value="AUD">AUD</option>
+            </select>
+          </li>
         </ul>
-        <p class="converter-two__input-block">
-          <input class="converter-two__input" placeholder="67.6685"></input>
-          <span class="converter-two__current-rate">1 USD = 73.8896 RUB</span>
+        <p class="converter__input-block">
+          <input class="converter__input" value="67.6685"></input>
+          <span class="converter__current-rate"></span>
         </p>
     </section>
   </main>
+  <script src="./js/script.js"></script>
 </body>
 
 </html>
