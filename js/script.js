@@ -1,16 +1,23 @@
 const state = {
     buttonListLeft: document.querySelector('.converter__list--left'),
     buttonListRight: document.querySelector('.converter__list--right'),
-    initialCurrency: 'EUR',
-    secondaryCurrency: 'USD',
     selectLeft: document.querySelector('.converter__list-select'),
     selectRight: document.querySelector('.converter__list-select--right'),
+
+
+    initialCurrency: 'EUR',
+    secondaryCurrency: 'USD',
     URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
     API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
+
     rateLeftText: document.querySelector('.converter--left .converter__current-rate'),
     rateRightText: document.querySelector('.converter--right .converter__current-rate'),
     inputLeft: document.querySelector('.converter--left .converter__input'),
     inputRight: document.querySelector('.converter--right .converter__input'),
+
+    URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
+    API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
+
     rateLeftToRight: null,
     rateRightToLeft: null,
 }
@@ -46,19 +53,46 @@ const fetchData = async (currency) => {
 
         // should renew 2spans + right input
         state.rateLeftToRight = 1
-        state.rateLeftText.innerHTML = `1 ${state.initialCurrency} = 1 ${state.secondaryCurrency}`
-        state.rateRightText.innerHTML = `1 ${state.initialCurrency} = 1 ${state.secondaryCurrency}`
+
+        // вызвать функцию перерисовки чтобы обновить данные
+        dataRender();
+
         state.inputRight.value = state.inputLeft.value
     } else {
         fetch(`${state.URL}?api_key=${state.API_KEY}&base=${state.initialCurrency}&quote=${state.secondaryCurrency}`)
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                state.rateLeftToRight = Number(data.quotes[0].midpoint).toFixed(2)
-                state.rateLeftText.innerHTML = `1 ${state.initialCurrency} = ${data.quotes[0].midpoint} ${state.secondaryCurrency}`
-                state.inputRight.value = (parseInt(state.inputLeft.value) * Number(data.quotes[0].midpoint)).toFixed(2)
+                // получаем актуальный курс
+                state.rateLeftToRight = Number(data.quotes[0].midpoint)
+                // вызываем ф-ию которая считает по этому курсу и обновляет данные
+                dataRender();
+
             })
     }
+}
+
+// функция которая обновляет данные в инпутах и в спанах
+
+const dataRender = (newLeftInputValue, newRightInputValue, newRateLeftTextValue, newRateRightTextValue) => {
+    // принимать новые значения для 2х спанов и 2х инпутов
+
+    // обновлять значения
+
+    // кейс когда валюты равны
+    if (state.initialCurrency === state.secondaryCurrency) {
+        state.rateLeftText.innerHTML = `1 ${state.initialCurrency} = 1 ${state.secondaryCurrency}`
+        state.rateRightText.innerHTML = `1 ${state.initialCurrency} = 1 ${state.secondaryCurrency}`
+    } else {
+        // кейс когда валюты не равны
+
+        state.rateLeftText.innerHTML = `1 ${state.initialCurrency} =  ${state.rateLeftToRight} ${state.secondaryCurrency}`
+        // state.rateRightText.innerHTML = `1 ${state.secondaryCurrency} =  state.rateRightToLeft ${state.initialCurrency}`
+
+        state.inputRight.value = (parseInt(state.inputLeft.value) * Number(state.rateLeftToRight)).toFixed(2)
+    }
+
+
 }
 
 fetchData()
