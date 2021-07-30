@@ -5,12 +5,14 @@ const state = {
     secondaryCurrency: 'USD',
     selectLeft: document.querySelector('.converter__list-select'),
     selectRight: document.querySelector('.converter__list-select--right'),
-    URL: 'http://api.exchangeratesapi.io/v1/latest',
-    API_KEY: '5249425ddee3e46303c2e3aeca06484d',
+    URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
+    API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
     rateLeftText: document.querySelector('.converter--left .converter__current-rate'),
     rateRightText: document.querySelector('.converter--right .converter__current-rate'),
     inputLeft: document.querySelector('.converter--left .converter__input'),
     inputRight: document.querySelector('.converter--right .converter__input'),
+    rateLeftToRight: null,
+    rateRightToLeft: null,
 }
 
 state.buttonListLeft.addEventListener('click', (event) => {
@@ -37,16 +39,34 @@ state.buttonListRight.addEventListener('click', (event) => {
     }
 })
 
-const fetchData = (currency) => {
+const fetchData = async (currency) => {
     console.log(currency)
-    fetch(`${state.URL}?access_key=${state.API_KEY}&base=${state.initialCurrency}&symbols=${state.secondaryCurrency}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            state.rateLeftText.innerHTML = `1 ${state.initialCurrency} = ${data.rates[state.secondaryCurrency]} ${state.secondaryCurrency}`
-            state.inputRight.value = parseInt(state.inputLeft.value) * Number(data.rates[state.secondaryCurrency])
-        })
+    if (state.initialCurrency === state.secondaryCurrency) {
+        // currencies are equal
+
+        // should renew 2spans + right input
+        state.rateLeftToRight = 1
+        state.rateLeftText.innerHTML = `1 ${state.initialCurrency} = 1 ${state.secondaryCurrency}`
+        state.rateRightText.innerHTML = `1 ${state.initialCurrency} = 1 ${state.secondaryCurrency}`
+        state.inputRight.value = state.inputLeft.value
+    } else {
+        fetch(`${state.URL}?api_key=${state.API_KEY}&base=${state.initialCurrency}&quote=${state.secondaryCurrency}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                state.rateLeftToRight = Number(data.quotes[0].midpoint).toFixed(2)
+                state.rateLeftText.innerHTML = `1 ${state.initialCurrency} = ${data.quotes[0].midpoint} ${state.secondaryCurrency}`
+                state.inputRight.value = (parseInt(state.inputLeft.value) * Number(data.quotes[0].midpoint)).toFixed(2)
+            })
+    }
 }
+
+fetchData()
+
+state.inputLeft.addEventListener('input', (event) => {
+    state.inputRight.value = (parseInt(state.inputLeft.value) * state.rateLeftToRight)
+    console.log(parseInt(state.inputLeft.value), state.rateLeftToRight)
+})
 
 state.selectLeft.addEventListener('change', (event) => {
     state.buttonListLeft.querySelectorAll('.converter__list-button').forEach((el) => {
