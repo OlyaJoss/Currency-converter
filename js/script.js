@@ -3,23 +3,21 @@ const state = {
     buttonListRight: document.querySelector('.converter__list--right'),
     selectLeft: document.querySelector('.converter__list-select'),
     selectRight: document.querySelector('.converter__list-select--right'),
-
-
-    initialCurrency: 'EUR',
-    secondaryCurrency: 'USD',
-    URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
-    API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
-
     rateLeftText: document.querySelector('.converter--left .converter__current-rate'),
     rateRightText: document.querySelector('.converter--right .converter__current-rate'),
     inputLeft: document.querySelector('.converter--left .converter__input'),
     inputRight: document.querySelector('.converter--right .converter__input'),
+    buttonArrows: document.querySelector('.arrows'),
+    modal: document.querySelector('.modal'),
 
+    URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
+    API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
+
+    initialCurrency: 'EUR',
+    secondaryCurrency: 'USD',
     rateLeftToRight: null,
     rateRightToLeft: null,
-    buttonArrows: document.querySelector('.arrows'),
     flagAPI: false,
-    modal: document.querySelector('.modal'),
 }
 
 state.buttonListLeft.addEventListener('click', (event) => {
