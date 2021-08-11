@@ -254,3 +254,32 @@
     background-color: #833AE0;
     color: #E5E5E5;
 }
+
+.modal {
+    position: absolute;
+    display: grid;
+    grid-template-columns: 1fr 300px 1fr;
+    grid-template-rows: 1fr 100px 1fr;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 50;
+    background-color: rgba(0, 0, 0, 0.44);
+}
+
+.modal__text {
+    color: #000000;
+    background-color: #FFFFFF;
+    font-size: 24px;
+    line-height: 100px;
+    text-align: center;
+    align-items: center;
+    grid-column: 2/3;
+    grid-row: 2/3;
+    margin: 0;
+}
+
+.modal--hide {
+    display: none;
+}

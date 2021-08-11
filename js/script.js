@@ -15,11 +15,11 @@ const state = {
     inputLeft: document.querySelector('.converter--left .converter__input'),
     inputRight: document.querySelector('.converter--right .converter__input'),
 
-    URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
-    API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
-
     rateLeftToRight: null,
     rateRightToLeft: null,
+    buttonArrows: document.querySelector('.arrows'),
+    flagAPI: false,
+    modal: document.querySelector('.modal'),
 }
 
 state.buttonListLeft.addEventListener('click', (event) => {
@@ -48,6 +48,7 @@ state.buttonListRight.addEventListener('click', (event) => {
 
 const fetchData = async (currency) => {
     console.log(currency)
+    state.flagAPI = false
     if (state.initialCurrency === state.secondaryCurrency) {
         // currencies are equal
 
@@ -58,23 +59,32 @@ const fetchData = async (currency) => {
         dataRender();
 
         state.inputRight.value = state.inputLeft.value
-    } else {
-        fetch(`${state.URL}?api_key=${state.API_KEY}&base=${state.initialCurrency}&quote=${state.secondaryCurrency}`)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                // получаем актуальный курс
-                state.rateLeftToRight = Number(data.quotes[0].midpoint)
-                // вызываем ф-ию которая считает по этому курсу и обновляет данные
-                dataRender();
-
-            })
+    } else try {
+        setTimeout(() => {
+            if (!state.flagAPI) {
+                state.modal.classList.remove('modal--hide')
+            }
+        }, 500)
+        const response = await fetch(`${state.URL}?api_key=${state.API_KEY}&base=${state.initialCurrency}&quote=${state.secondaryCurrency}`)
+        const data = await response.json()
+        console.log(data);
+        // получаем актуальный курс
+        state.rateLeftToRight = Number(data.quotes[0].midpoint)
+        // вызываем ф-ию которая считает по этому курсу и обновляет данные
+        const responseRight = await fetch(`${state.URL}?api_key=${state.API_KEY}&base=${state.secondaryCurrency}&quote=${state.initialCurrency}`)
+        const dataRight = await responseRight.json()
+        state.rateRightToLeft = Number(dataRight.quotes[0].midpoint)
+        dataRender();
+        state.flagAPI = true
+    } catch (error) {
+        console.log(error)
+        state.modal.classList.remove('modal--hide')
     }
 }
 
 // функция которая обновляет данные в инпутах и в спанах
 
-const dataRender = (newLeftInputValue, newRightInputValue, newRateLeftTextValue, newRateRightTextValue) => {
+const dataRender = () => {
     // принимать новые значения для 2х спанов и 2х инпутов
 
     // обновлять значения
@@ -87,19 +97,21 @@ const dataRender = (newLeftInputValue, newRightInputValue, newRateLeftTextValue,
         // кейс когда валюты не равны
 
         state.rateLeftText.innerHTML = `1 ${state.initialCurrency} =  ${state.rateLeftToRight} ${state.secondaryCurrency}`
-        // state.rateRightText.innerHTML = `1 ${state.secondaryCurrency} =  state.rateRightToLeft ${state.initialCurrency}`
+        state.rateRightText.innerHTML = `1 ${state.secondaryCurrency} =  ${state.rateRightToLeft} ${state.initialCurrency}`
 
         state.inputRight.value = (parseInt(state.inputLeft.value) * Number(state.rateLeftToRight)).toFixed(2)
     }
-
-
 }
 
 fetchData()
 
 state.inputLeft.addEventListener('input', (event) => {
-    state.inputRight.value = (parseInt(state.inputLeft.value) * state.rateLeftToRight)
+    state.inputRight.value = (parseInt(state.inputLeft.value) * state.rateLeftToRight).toFixed(2)
     console.log(parseInt(state.inputLeft.value), state.rateLeftToRight)
+})
+
+state.inputRight.addEventListener('input', (event) => {
+    state.inputLeft.value = (parseInt(state.inputRight.value) * state.rateRightToLeft).toFixed(2)
 })
 
 state.selectLeft.addEventListener('change', (event) => {
@@ -118,4 +130,9 @@ state.selectRight.addEventListener('change', (event) => {
     state.secondaryCurrency = state.selectRight.value
     event.target.classList.add('converter__list-select--active')
     fetchData(state.secondaryCurrency)
+})
+
+state.buttonArrows.addEventListener('click', () => {
+    state.inputLeft.value = state.inputRight.value
+    dataRender()
 })
