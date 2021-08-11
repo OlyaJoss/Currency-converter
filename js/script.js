@@ -13,7 +13,7 @@ const state = {
     URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
     API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
 
-    initialCurrency: 'EUR',
+    initialCurrency: 'RUB',
     secondaryCurrency: 'USD',
     rateLeftToRight: null,
     rateRightToLeft: null,
@@ -58,11 +58,11 @@ const fetchData = async (currency) => {
 
         state.inputRight.value = state.inputLeft.value
     } else try {
-        setTimeout(() => {
-            if (!state.flagAPI) {
-                state.modal.classList.remove('modal--hide')
-            }
-        }, 500)
+        // setTimeout(() => {
+        //     if (!state.flagAPI) {
+        //         state.modal.classList.remove('modal--hide')
+        //     }
+        // }, 500)
         const response = await fetch(`${state.URL}?api_key=${state.API_KEY}&base=${state.initialCurrency}&quote=${state.secondaryCurrency}`)
         const data = await response.json()
         console.log(data);
@@ -79,6 +79,8 @@ const fetchData = async (currency) => {
         state.modal.classList.remove('modal--hide')
     }
 }
+
+
 
 // функция которая обновляет данные в инпутах и в спанах
 
@@ -104,12 +106,12 @@ const dataRender = () => {
 fetchData()
 
 state.inputLeft.addEventListener('input', (event) => {
-    state.inputRight.value = (parseInt(state.inputLeft.value) * state.rateLeftToRight).toFixed(2)
     console.log(parseInt(state.inputLeft.value), state.rateLeftToRight)
+    state.inputLeft.value === '' ? state.inputRight.value = '' : state.inputRight.value = (parseInt(state.inputLeft.value) * state.rateLeftToRight).toFixed(2)
 })
 
 state.inputRight.addEventListener('input', (event) => {
-    state.inputLeft.value = (parseInt(state.inputRight.value) * state.rateRightToLeft).toFixed(2)
+    state.inputRight.value === '' ? state.inputLeft.value = '' :  state.inputLeft.value = (parseInt(state.inputRight.value) * state.rateRightToLeft).toFixed(2)
 })
 
 state.selectLeft.addEventListener('change', (event) => {
@@ -133,4 +135,8 @@ state.selectRight.addEventListener('change', (event) => {
 state.buttonArrows.addEventListener('click', () => {
     state.inputLeft.value = state.inputRight.value
     dataRender()
+})
+
+state.modal.addEventListener('click', (event) => {
+    event.target.classList.add('modal--hide')
 })
