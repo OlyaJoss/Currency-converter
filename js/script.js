@@ -1,4 +1,5 @@
 const state = {
+    // свойства
     buttonListLeft: document.querySelector('.converter__list--left'),
     buttonListRight: document.querySelector('.converter__list--right'),
     selectLeft: document.querySelector('.converter__list-select'),
@@ -21,32 +22,34 @@ const state = {
 }
 
 state.buttonListLeft.addEventListener('click', (event) => {
-    if (event.target.classList.contains('converter__list-button')) {
-        state.buttonListLeft.querySelectorAll('.converter__list-button').forEach((el) => {
-            el.classList.remove('converter__list-button--active')
-        })
-        event.target.classList.add('converter__list-button--active')
-        state.initialCurrency = event.target.innerText
-        fetchData(state.initialCurrency)
-        state.selectLeft.classList.remove('converter__list-select--active')
-    }
+    buttonListHandler(state.buttonListLeft, state.initialCurrency, state.selectLeft, event)
 })
 
 state.buttonListRight.addEventListener('click', (event) => {
+    buttonListHandler(state.buttonListRight, state.secondaryCurrency, state.selectRight, event)
+})
+
+const buttonListHandler = async (buttonList, currency, select, event) => {
+    console.log(event.target)
     if (event.target.classList.contains('converter__list-button')) {
-        state.buttonListRight.querySelectorAll('.converter__list-button').forEach((el) => {
+        // различие
+        buttonList.querySelectorAll('.converter__list-button').forEach((el) => {
             el.classList.remove('converter__list-button--active')
         })
         event.target.classList.add('converter__list-button--active')
-        state.secondaryCurrency = event.target.innerText
-        fetchData(state.secondaryCurrency)
-        state.selectRight.classList.remove('converter__list-select--active')
+        // обновляем валюту, чтобы поменялось значение из state (там рубли)
+        // различие
+        console.log(event.target.innerText)
+        currency = event.target.innerText
+        // различие
+        await fetchData(currency)
+        // различие
+        select.classList.remove('converter__list-select--active')
     }
-})
+}
 
 const fetchData = async (currency) => {
     console.log(currency)
-    state.flagAPI = false
     if (state.initialCurrency === state.secondaryCurrency) {
         // currencies are equal
 
@@ -58,11 +61,6 @@ const fetchData = async (currency) => {
 
         state.inputRight.value = state.inputLeft.value
     } else try {
-        // setTimeout(() => {
-        //     if (!state.flagAPI) {
-        //         state.modal.classList.remove('modal--hide')
-        //     }
-        // }, 500)
         const response = await fetch(`${state.URL}?api_key=${state.API_KEY}&base=${state.initialCurrency}&quote=${state.secondaryCurrency}`)
         const data = await response.json()
         console.log(data);
@@ -106,13 +104,13 @@ const dataRender = () => {
 fetchData()
 
 state.inputLeft.addEventListener('input', (event) => {
-    console.log(parseInt(state.inputLeft.value), state.rateLeftToRight)
     state.inputLeft.value === '' ? state.inputRight.value = '' : state.inputRight.value = (parseInt(state.inputLeft.value) * state.rateLeftToRight).toFixed(2)
 })
 
 state.inputRight.addEventListener('input', (event) => {
-    state.inputRight.value === '' ? state.inputLeft.value = '' :  state.inputLeft.value = (parseInt(state.inputRight.value) * state.rateRightToLeft).toFixed(2)
+    state.inputRight.value === '' ? state.inputLeft.value = '' : state.inputLeft.value = (parseInt(state.inputRight.value) * state.rateRightToLeft).toFixed(2)
 })
+
 
 state.selectLeft.addEventListener('change', (event) => {
     state.buttonListLeft.querySelectorAll('.converter__list-button').forEach((el) => {
@@ -131,6 +129,7 @@ state.selectRight.addEventListener('change', (event) => {
     event.target.classList.add('converter__list-select--active')
     fetchData(state.secondaryCurrency)
 })
+
 
 state.buttonArrows.addEventListener('click', () => {
     state.inputLeft.value = state.inputRight.value
