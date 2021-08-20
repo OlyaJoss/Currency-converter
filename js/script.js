@@ -12,7 +12,7 @@ const state = {
     modal: document.querySelector('.modal'),
 
     URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
-    API_KEY: 'sJdI0ater0rUIYOTFdUo6pY1',
+    API_KEY: 'htwHUTR59eXxVyFdrORY8ROI',
 
     initialCurrency: 'RUB',
     secondaryCurrency: 'USD',
@@ -22,34 +22,43 @@ const state = {
 }
 
 state.buttonListLeft.addEventListener('click', (event) => {
-    buttonListHandler(state.buttonListLeft, state.initialCurrency, state.selectLeft, event)
+    buttonListHandler(event)
 })
 
 state.buttonListRight.addEventListener('click', (event) => {
-    buttonListHandler(state.buttonListRight, state.secondaryCurrency, state.selectRight, event)
+    buttonListHandler(event)
 })
 
-const buttonListHandler = async (buttonList, currency, select, event) => {
+const buttonListHandler = async (event) => {
+
+
     console.log(event.target)
-    if (event.target.classList.contains('converter__list-button')) {
-        // различие
-        buttonList.querySelectorAll('.converter__list-button').forEach((el) => {
-            el.classList.remove('converter__list-button--active')
-        })
+
+    // различие
+
+    const converterList = event.target.closest('.converter__list')
+
+    converterList.querySelectorAll('.converter__list-button').forEach((el) => {
+        el.classList.remove('converter__list-button--active')
+    })
+
+    if (event.target.tagName === 'BUTTON') {
         event.target.classList.add('converter__list-button--active')
         // обновляем валюту, чтобы поменялось значение из state (там рубли)
         // различие
-        console.log(event.target.innerText)
-        currency = event.target.innerText
-        // различие
-        await fetchData(currency)
-        // различие
-        select.classList.remove('converter__list-select--active')
+        converterList.classList.contains('converter__list--left') ? state.initialCurrency = event.target.innerText : state.secondaryCurrency = event.target.innerText;
+        converterList.querySelector('.converter__list-select').classList.remove('converter__list-select--active')
+    } else if (event.target.tagName === 'SELECT') {
+        converterList.classList.contains('converter__list--left') ? state.initialCurrency = state.selectLeft.value : state.secondaryCurrency = state.selectRight.value
+
+        event.target.classList.add('converter__list-select--active')
     }
+
+    await fetchData()
 }
 
-const fetchData = async (currency) => {
-    console.log(currency)
+const fetchData = async () => {
+
     if (state.initialCurrency === state.secondaryCurrency) {
         // currencies are equal
 
@@ -77,8 +86,6 @@ const fetchData = async (currency) => {
         state.modal.classList.remove('modal--hide')
     }
 }
-
-
 
 // функция которая обновляет данные в инпутах и в спанах
 
@@ -112,22 +119,13 @@ state.inputRight.addEventListener('input', (event) => {
 })
 
 
+
 state.selectLeft.addEventListener('change', (event) => {
-    state.buttonListLeft.querySelectorAll('.converter__list-button').forEach((el) => {
-        el.classList.remove('converter__list-button--active')
-    })
-    state.initialCurrency = state.selectLeft.value
-    event.target.classList.add('converter__list-select--active')
-    fetchData(state.initialCurrency)
+    buttonListHandler(event)
 })
 
 state.selectRight.addEventListener('change', (event) => {
-    state.buttonListRight.querySelectorAll('.converter__list-button').forEach((el) => {
-        el.classList.remove('converter__list-button--active')
-    })
-    state.secondaryCurrency = state.selectRight.value
-    event.target.classList.add('converter__list-select--active')
-    fetchData(state.secondaryCurrency)
+    buttonListHandler(event)
 })
 
 
