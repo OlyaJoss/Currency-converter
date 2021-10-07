@@ -12,7 +12,7 @@ const state = {
     modal: document.querySelector('.modal'),
 
     URL: 'https://www1.oanda.com/rates/api/v2/rates/spot.json',
-    API_KEY: 'htwHUTR59eXxVyFdrORY8ROI',
+    API_KEY: 'XOqwr293RckUy4rqQHXiLU0E',
 
     initialCurrency: 'RUB',
     secondaryCurrency: 'USD',
